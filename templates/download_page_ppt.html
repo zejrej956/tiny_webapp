@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} {{instance.title}} | {{block.super}} {% endblock title %}
+
+
+{% block content %}
+
+<div id="container">
+<br><br>
+	<div class="row">
+		<div class="col-sm-6 col-sm-offset-3">			
+			<div class="col-sm-6 col-sm-offset-3">			
+				{% if messages %}
+					{% for message in messages %}
+					    <h4 {% if message.tags %} class="{{ message.tags }} text-align-center"{% endif %}>{{ message }}</h4>
+					{% endfor %}
+				{% endif %}
+				</hr>
+				<p><b>Filename:</b> <br> {{name}}</p>
+				<a href="{{ MEDIA_URL }}/{{name}}" class="btn btn-block btn-success"><span class="glyphicon glyphicon-cloud-download"></span> Download Presentation</a>
+			</div>
+		</div>
+	</div>
+</div> 
+<!-- end of class container -->
+
+{% endblock content %}

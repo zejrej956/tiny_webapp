@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div id="container">
+	<div class="col-md-6 col-md-offset-3">	
+		<br><br><br><br><br>	
+		
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<h2 class="text-align-center">Welcome Fella!</h2>
+			</div>
+		</div>
+		
+		<div class="row form">
+
+			<div class="col-sm-6 col-sm-offset-3">
+				
+				<form  method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+					<div class="form-group">
+						<!-- <button type="submit" class = "btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#downloadModal"><span class="glyphicon glyphicon-cloud-upload"></span> Convert to CSV</button> -->
+						{% if messages %}
+							{% for message in messages %}
+							    <h4 {% if message.tags %} class="{{ message.tags }} text-align-center"{% endif %}>{{ message }}</h4>
+							{% endfor %}
+						{% endif %}
+						{{ form | crispy}}
+ 						<button type="submit" class = "btn btn-primary btn-block"><span class="glyphicon glyphicon-circle-arrow-right"></span> Convert to CSV</button>				
+					</div>	
+				</form>
+
+				<div class="modal fade" id="downloadModal">
+				  <div class="modal-dialog modal-sm">
+				      <div class="modal-content">
+				        <div class="modal-header">
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				          <p class="modal-title lead">Download CSV File</p>
+				        </div>
+
+				        <div class="modal-body">
+				          <button class="btn btn-block btn-success"><span class="glyphicon glyphicon-cloud-download"></span> Download</button>
+				        </div>
+				      </div>
+				  </div>
+				</div>			
+			</div>		
+		</div>
+	</div>
+</div>
+
+
+{% endblock content %}

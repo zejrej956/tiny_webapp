@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load i18n %}
+<!-- use in forms -->
+{% load bootstrap %} 
+
+{% block meta_title %}{% trans "Convert Text to PPT" %}{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
+{% block content %}
+<div class="container">
+
+		<br>
+
+		<h1>Convert your report outline to a PowerPoint presentation</h1>
+
+		<hr>
+
+		<div class="row form">
+
+			<!-- end of col col-sm-6 -->
+			<div class="col-sm-6 col-sm-offset-3">
+				<small><i>(You can choose an existing file)</i></small>
+				<form  role="form" method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+					<div class="form-group">
+						<!-- <button type="submit" class = "btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#downloadModal"><span class="glyphicon glyphicon-cloud-upload"></span> Convert to CSV</button> -->
+							{% if messages %}
+							{% for message in messages %}
+							    <h4 {% if message.tags %} class="{{ message.tags }} text-align-center"{% endif %}>{{ message }}</h4>
+							{% endfor %}
+							{% endif %}
+
+							{{ form_ImportFile | bootstrap}}
+							<hr>
+							<td>
+								{{ form_TemplateOptions | bootstrap }}
+							<td>
+
+							<div id="user_template_div">
+								{{ form_UserSlideTemplate | bootstrap }}
+							</div>
+							<!-- <div id="preloaded_template_div">
+								{{ form_PreloadedSlideTemplate | bootstrap }}
+							</div> -->
+							<hr>
+							<!-- <a href="{% url 'txttoppt:slide_templates' %}" class="btn btn-primary btn-block">Continue</a> -->
+							<button type="submit" class = "btn btn-primary btn-block"><span class="glyphicon glyphicon-circle-arrow-right"></span> Convert to PowerPoint Presentation</button>				
+					</div>	
+				</form>
+
+			</div>		
+			<!-- end of col col-sm-6 -->
+		</div>
+		<!-- end of row form class -->
+</div>
+{% endblock content %}

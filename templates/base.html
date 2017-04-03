@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}"{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
+{% load pages_tags mezzanine_tags i18n staticfiles %}
+
+
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+<meta name="description" content="{% block meta_description %}{% endblock %}">
+<title>{% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}</title>
+
+<link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
+
+{% ifinstalled mezzanine.blog %}
+<link rel="alternate" type="application/rss+xml" title="RSS" href="{% url "blog_post_feed" "rss" %}">
+<link rel="alternate" type="application/atom+xml" title="Atom" href="{% url "blog_post_feed" "atom" %}">
+{% endifinstalled %}
+
+{% compress css %}
+<!-- custom.css is a customized css -->
+<link rel="stylesheet" href="{% static "css/custom.css" %}">
+<link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+<link rel="stylesheet" href="{% static "css/mezzanine.css" %}">
+<link rel="stylesheet" href="{% static "css/bootstrap-theme.css" %}">
+{% if LANGUAGE_BIDI %}
+<link rel="stylesheet" href="{% static "css/bootstrap-rtl.css" %}">
+{% endif %}
+{% ifinstalled cartridge.shop %}
+<link rel="stylesheet" href="{% static "css/cartridge.css" %}">
+{% if LANGUAGE_BIDI %}
+<link rel="stylesheet" href="{% static "css/cartridge.rtl.css" %}">
+{% endif %}
+{% endifinstalled %}
+{% block extra_css %}{% endblock %}
+{% endcompress %}
+
+{% compress js %}
+<script src="{% static "mezzanine/js/"|add:settings.JQUERY_FILENAME %}"></script>
+<script src="{% static "js/bootstrap.js" %}"></script>
+<script src="{% static "js/bootstrap-extras.js" %}"></script>
+
+<!-- custom js -->
+<!-- textarea_autoresize_custom.js is a customized javascript for autoresize textarea -->
+<script src="{% static "js/textarea_autoresize_custom.js" %}"></script>
+
+{% block extra_js %}{% endblock %}
+{% endcompress %}
+
+<!--[if lt IE 9]>
+<script src="{% static "js/html5shiv.js" %}"></script>
+<script src="{% static "js/respond.min.js" %}"></script>
+<![endif]-->
+
+{% block extra_head %}{% endblock %}
+</head>
+
+
+<body id="{% block body_id %}body{% endblock %}">
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">{% trans "Toggle Navigation" %}</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                {% block navbar_title %}
+                {% if settings.SITE_TITLE %}<a class="navbar-brand" href="/">{{ settings.SITE_TITLE }}</a>{% endif %}
+                {% if settings.SITE_TAGLINE %}<p class="navbar-text visible-lg">{{ settings.SITE_TAGLINE }}</p>{% endif %}
+                {% endblock%}
+            </div>
+            <div class="navbar-collapse collapse">  
+                {% if request.user.is_authenticated %}  
+            	<ul class="nav navbar-nav navbar-right">         		
+	                {% block navbar_dropdown_menu %}{% page_menu "pages/menus/dropdown.html" %}{% endblock%}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+                {% endif %}  
+            </div>
+            
+        </div>
+    </div>
+    <!-- end of navbar -->
+
+    {% block content %}
+
+    {% endblock content %}
+
+    <footer>
+        <div class="container">
+        {% page_menu "pages/menus/footer.html" %}
+
+        <div class="row">
+        <p class="site-info text-center">
+            {% trans "Powered by" %}
+            <a href="http://mezzanine.jupo.org">Mezzanine</a>{% ifinstalled cartridge.shop %},
+            <a href="http://cartridge.jupo.org">Cartridge</a>{% endifinstalled %}
+            {% trans "and" %}
+            <a href="http://www.djangoproject.com">Django</a>
+            <span class="separator">|</span>
+            {% trans "Theme by" %} <a target="_blank" href="http://getbootstrap.com">Bootstrap</a>
+            {% ifinstalled mezzanine.mobile %}
+            <span class="separator">|</span>
+            <a href="{% url "set_device" "mobile" %}?next={{ request.path }}">{% trans "View Mobile Site" %}</a>
+            {% endifinstalled %}
+        </p>
+        </div>
+        </div>
+    </footer>
+
+</body>
+
+<!-- allows the textarea in "creatoutline" page to capture the "tab" key presses
+and prevent to tab into the next element in the page -->
+<script type="text/javascript">
+    
+    $(document).delegate('#outline', 'keydown', function(e) { 
+      var keyCode = e.keyCode || e.which; 
+
+      if (keyCode == 9) { 
+        e.preventDefault(); 
+        var start = $(this).get(0).selectionStart;
+        var end = $(this).get(0).selectionEnd;
+
+        // set textarea value to: text before caret + tab + text after caret
+        $(this).val($(this).val().substring(0, start)
+                    + "\t"
+                    + $(this).val().substring(end));
+
+        // put caret at right position again
+        $(this).get(0).selectionStart = 
+        $(this).get(0).selectionEnd = start + 1;
+
+        // auto resize vertically
+
+      } 
+
+      
+    });
+
+    // text area >> create outline by editor
+    $(function(){
+        $('.normal').autosize();
+        $('.animated').autosize({append: "\n"});
+    });
+
+    // options for which slide template to use
+    $(document).ready(function() {
+        $("#user_template_div").hide();
+        $("#preloaded_template_div").hide();
+        $("#template_option_1").click(function() {
+            
+            $("#user_template_div").hide()
+            $("#preloaded_template_div").fadeIn("slow")
+        });
+        $("#template_option_0").click(function() {
+            
+            $("#preloaded_template_div").hide()
+            $("#user_template_div").fadeIn("slow")
+        });
+       
+    });
+
+</script>
+
+</html>
+<!-- 
+    # <input id="radio_preloaded_templates" type="radio" checked="cheked" name="template" value="0">    Use Preloaded Templates
+    # <input id ="radio_user_templates" type="radio" name="template" value="1"> Upload Own Templates
+ -->

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+<!-- use in forms -->
+{% load bootstrap %} 
+
+{% block meta_title %}{% trans "Home" %}{% endblock %}
+{% block title %}{% trans "Home" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+		<br>
+
+		<h1>Convert your spreadsheet to a CSV File</h1>
+
+		<hr>
+
+		<div class="col-sm-6 col-sm-offset-3">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					
+				</div>
+			</div>		
+			
+			<div class="row form">
+
+				<div class="col-sm-6 col-sm-offset-3">
+					
+					<form  method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+						<div class="form-group">
+							<!-- <button type="submit" class = "btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#downloadModal"><span class="glyphicon glyphicon-cloud-upload"></span> Convert to CSV</button> -->
+							<legend>Import your spreadsheet</legend>
+							{% if messages %}
+								{% for message in messages %}
+								    <h4 {% if message.tags %} class="{{ message.tags }} text-align-center"{% endif %}>{{ message }}</h4>
+								{% endfor %}
+							{% endif %}
+							{{ form | bootstrap}}
+	 						<button type="submit" class = "btn btn-primary btn-block"><span class="glyphicon glyphicon-circle-arrow-right"></span> Convert to CSV</button>				
+						</div>	
+					</form>	
+				</div>		
+			</div>
+		</div>
+</div>
+{% endblock content %}
+
+
+
